@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Table</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+  <center>
+<div class="container mt-5">
+    <input type="text" id="name" placeholder="Name" class="form">
+    <input type="email" id="email" placeholder="Email" class="form">
+    <button id="addRow" class="btn btn-primary mb-3">Add User</button>
+    <table class="table table-bordered" id="dynamicTable">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Rows will be added here dynamically -->
+             <center>
+             </tbody>
+    </table>
+</div>
+
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<!-- Popper.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<!-- Bootstrap JS -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<!-- Custom JS -->
+<script>
+$(document).ready(function() {
+    let idCounter = 1;
+
+
+
+
+
+
+    // Function to add a new row
+    $('#addRow').click(function(e) {
+        e.preventDefault();
+        
+        let name = $('#name').val();
+        let email = $('#email').val();
+
+        if (name && email) {
+            let row = `
+                <tr id="row${idCounter}">
+                    <td>${idCounter}</td>
+                    <td>${name}</td>
+                    <td>${email}</td>
+                    <td><button class="btn btn-warning btnEdit">Edit</button></td>
+                    <td><button class="btn btn-danger btnDelete">Delete</button></td>
+                </tr>`;
+            $('#dynamicTable tbody').append(row);
+            idCounter++;
+            $('#name').val('');
+            $('#email').val('');
+        } else {
+            alert('Please enter both name and email.');
+        }
+    });
+
+
+
+
+
+
+
+    // Function to delete a row
+    $(document).on('click', '.btnDelete', function() {
+        $(this).closest('tr').remove();
+    });
+
+
+
+
+
+
+    // Function to edit a row
+    $(document).on('click', '.btnEdit', function() {
+        let row = $(this).closest('tr');
+        let name = row.find('td:nth-child(2)').text();
+        let email = row.find('td:nth-child(3)').text();
+
+        row.find('td:nth-child(2)').html(`<input type="text" class="form-control" value="${name}">`);
+        row.find('td:nth-child(3)').html(`<input type="email" class="form-control" value="${email}">`);
+
+        $(this).text('Save').removeClass('btnEdit btn-warning').addClass('btnSave btn-success');
+    });
+
+    // Function to save edited row
+    $(document).on('click', '.btnSave', function() {
+        let row = $(this).closest('tr');
+        let name = row.find('td:nth-child(2) input').val();
+        let email = row.find('td:nth-child(3) input').val();
+
+        row.find('td:nth-child(2)').text(name);
+        row.find('td:nth-child(3)').text(email);
+
+        $(this).text('Edit').removeClass('btnSave btn-success').addClass('btnEdit btn-warning');
+    });
+});
+</script>
+
+</body>
+</html>
